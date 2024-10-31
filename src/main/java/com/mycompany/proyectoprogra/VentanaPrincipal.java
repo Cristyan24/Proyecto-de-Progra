@@ -36,7 +36,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonVideo = new javax.swing.JButton();
         BotonImagen = new javax.swing.JButton();
         AbrirCarpeta = new javax.swing.JButton();
-        Texto1 = new javax.swing.JTextField();
         list1 = new java.awt.List();
         PanelTablas = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -80,7 +79,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         AbrirCarpeta.setText("Seleccionar Carpeta");
         AbrirCarpeta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         jPanel1.add(AbrirCarpeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 80));
-        jPanel1.add(Texto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 440, 30));
         jPanel1.add(list1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 160, 210));
 
         PanelTablas.setBackground(new java.awt.Color(51, 51, 51));
@@ -217,7 +215,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel Fondo;
     private javax.swing.JPanel PanelTablas;
     private javax.swing.JTable TablaMusic;
-    private javax.swing.JTextField Texto1;
     private javax.swing.JLabel Titulo1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
