@@ -13,9 +13,6 @@ import javax.swing.ImageIcon;
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form VentanaPrincipal
-     */
     public VentanaPrincipal() {
         initComponents();
         
@@ -36,6 +33,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonVideo = new javax.swing.JButton();
         BotonImagen = new javax.swing.JButton();
         AbrirCarpeta = new javax.swing.JButton();
+        Texto1 = new javax.swing.JTextField();
         list1 = new java.awt.List();
         PanelTablas = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -44,6 +42,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonAtrasMusic = new javax.swing.JButton();
         BotReproducirMusic = new javax.swing.JButton();
         BotonSigMusic = new javax.swing.JButton();
+        MostrarImagen = new javax.swing.JButton();
+        VerVideo = new javax.swing.JButton();
         Fondo = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
 
@@ -79,6 +79,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         AbrirCarpeta.setText("Seleccionar Carpeta");
         AbrirCarpeta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         jPanel1.add(AbrirCarpeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 80));
+        jPanel1.add(Texto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 440, 30));
         jPanel1.add(list1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 160, 210));
 
         PanelTablas.setBackground(new java.awt.Color(51, 51, 51));
@@ -93,7 +94,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             new String [] {
                 "Nombre", "Ext", "Artista", "Álbum", "Género", "Duración", "Año", "Ruta", "Tamaño"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(TablaMusic);
 
         javax.swing.GroupLayout PanelTablasLayout = new javax.swing.GroupLayout(PanelTablas);
@@ -113,41 +122,55 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
-        jPanel1.add(PanelTablas, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, 800, 310));
+        jPanel1.add(PanelTablas, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 800, 310));
 
         jPanel2.setBackground(new java.awt.Color(102, 102, 102));
 
-        BotonAtrasMusic.setText("Atras");
+        BotonAtrasMusic.setBackground(new java.awt.Color(0, 0, 0));
+        BotonAtrasMusic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/atras.png"))); // NOI18N
 
-        BotReproducirMusic.setText("Reproducir");
+        BotReproducirMusic.setBackground(new java.awt.Color(0, 0, 0));
+        BotReproducirMusic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/Reproducir.png"))); // NOI18N
 
-        BotonSigMusic.setText("Siguiente");
+        BotonSigMusic.setBackground(new java.awt.Color(0, 0, 0));
+        BotonSigMusic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/siguiente.png"))); // NOI18N
+
+        MostrarImagen.setBackground(new java.awt.Color(0, 0, 0));
+        MostrarImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/IconImage.png"))); // NOI18N
+
+        VerVideo.setBackground(new java.awt.Color(0, 0, 0));
+        VerVideo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/VerVideo.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(9, 9, 9)
                 .addComponent(BotonAtrasMusic)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(BotReproducirMusic)
-                .addGap(40, 40, 40)
+                .addGap(18, 18, 18)
                 .addComponent(BotonSigMusic)
-                .addContainerGap(462, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(VerVideo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(MostrarImagen)
+                .addContainerGap(543, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(11, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(BotonAtrasMusic)
                     .addComponent(BotReproducirMusic)
-                    .addComponent(BotonSigMusic))
-                .addContainerGap())
+                    .addComponent(BotonSigMusic)
+                    .addComponent(VerVideo)
+                    .addComponent(MostrarImagen, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 620, 800, 40));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 600, 800, 50));
 
         Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/spiderman.jpg"))); // NOI18N
         jPanel1.add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1360, 690));
@@ -213,9 +236,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton BotonSigMusic;
     private javax.swing.JButton BotonVideo;
     private javax.swing.JLabel Fondo;
+    private javax.swing.JButton MostrarImagen;
     private javax.swing.JPanel PanelTablas;
     private javax.swing.JTable TablaMusic;
+    private javax.swing.JTextField Texto1;
     private javax.swing.JLabel Titulo1;
+    private javax.swing.JButton VerVideo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
