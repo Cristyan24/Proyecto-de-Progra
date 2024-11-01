@@ -6,15 +6,36 @@ package com.mycompany.proyectoprogra;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 
 /**
  *
  * @author user
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
+    private Carpeta carpetaSeleccionada;
+    
+    
+    public class Carpeta {
+    private String ruta;
 
+    // Constructor que recibe la ruta de la carpeta seleccionada
+    public Carpeta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    // Método para obtener la ruta de la carpeta
+    public String getRuta() {
+        return ruta;
+    }
+}
+    
+    //Constructor
     public VentanaPrincipal() {
         initComponents();
+        
+        VerVideo.setVisible(false);
+        MostrarImagen.setVisible(false);
         
     }
 
@@ -33,7 +54,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonVideo = new javax.swing.JButton();
         BotonImagen = new javax.swing.JButton();
         AbrirCarpeta = new javax.swing.JButton();
-        Texto1 = new javax.swing.JTextField();
+        TextoRuta = new javax.swing.JTextField();
         list1 = new java.awt.List();
         PanelTablas = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -78,8 +99,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         AbrirCarpeta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/Carpetas.png"))); // NOI18N
         AbrirCarpeta.setText("Seleccionar Carpeta");
         AbrirCarpeta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        AbrirCarpeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AbrirCarpetaActionPerformed(evt);
+            }
+        });
         jPanel1.add(AbrirCarpeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 80));
-        jPanel1.add(Texto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 440, 30));
+        jPanel1.add(TextoRuta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 440, 30));
         jPanel1.add(list1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 160, 210));
 
         PanelTablas.setBackground(new java.awt.Color(51, 51, 51));
@@ -192,6 +218,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void AbrirCarpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirCarpetaActionPerformed
+        JFileChooser folderChooser = new JFileChooser();
+        folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Solo seleccionar directorios
+        
+        // Mostrar el diálogo de selección de carpeta
+        int result = folderChooser.showOpenDialog(null);
+        
+        // Si el usuario selecciona una carpeta
+        if (result == JFileChooser.APPROVE_OPTION) {
+            String rutaSeleccionada = folderChooser.getSelectedFile().getAbsolutePath();
+            
+            // Mostrar la ruta seleccionada en el JTextField
+            TextoRuta.setText(rutaSeleccionada); 
+            
+             carpetaSeleccionada = new Carpeta(rutaSeleccionada);
+        }
+    }//GEN-LAST:event_AbrirCarpetaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -239,7 +283,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton MostrarImagen;
     private javax.swing.JPanel PanelTablas;
     private javax.swing.JTable TablaMusic;
-    private javax.swing.JTextField Texto1;
+    private javax.swing.JTextField TextoRuta;
     private javax.swing.JLabel Titulo1;
     private javax.swing.JButton VerVideo;
     private javax.swing.JPanel jPanel1;
