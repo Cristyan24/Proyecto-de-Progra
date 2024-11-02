@@ -2,12 +2,12 @@
 package com.mycompany.proyectoprogra;
 
 import java.awt.Image;
+import java.io.BufferedInputStream;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-//import javax.swing.text.html.HTML.Tag;
 //Para el modelo de tabla
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -28,6 +28,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     public String RutaAcceso;
     private Player player;
+    private boolean enPausa = false;
+    private int pausaFrame = 0;
     //private EmbeddedMediaPlayerComponent mediaPlayerComponent;
     
     public VentanaPrincipal() {
@@ -189,6 +191,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotonSigMusic.setBackground(new java.awt.Color(0, 0, 0));
         BotonSigMusic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/siguiente.png"))); // NOI18N
+        BotonSigMusic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonSigMusicActionPerformed(evt);
+            }
+        });
 
         MostrarImagen.setBackground(new java.awt.Color(0, 0, 0));
         MostrarImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/IconImage.png"))); // NOI18N
@@ -326,8 +333,68 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_BotReproducirMusicActionPerformed
 
     private void BotonPausaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonPausaActionPerformed
-        // TODO add your handling code here:
+        if (player != null) {
+        try {
+            if (enPausa) {
+                // Reanuda desde el punto pausado
+                player.play();
+                enPausa = false;
+            } else {
+                // Guarda el frame actual y cierra el reproductor para detener la reproducción
+                player.close();
+                enPausa = true;
+            }
+        } catch (Exception e) {
+            //JOptionPane.showMessageDialog(this, "Error al pausar/reanudar: ");
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "No estás reproduciendo nada");
+    }
     }//GEN-LAST:event_BotonPausaActionPerformed
+
+    private void BotonSigMusicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonSigMusicActionPerformed
+       int filaActual = TablaMyV.getSelectedRow();
+        if (filaActual == -1) {
+        JOptionPane.showMessageDialog(this, "Por favor selecciona una canción.");
+         return;
+           }
+
+// Obtener la siguiente fila
+            int filaSiguiente = filaActual + 1;
+            if (filaSiguiente >= TablaMyV.getRowCount()) {
+    JOptionPane.showMessageDialog(this, "No hay más canciones en la lista.");
+    return;
+}
+
+try {
+    // Cerrar el reproductor actual antes de reproducir la siguiente canción
+    if (player != null) {
+        player.close();
+    }
+    // Obtener la ruta del archivo de la siguiente canción
+    String rutaCancion = TablaMyV.getValueAt(filaSiguiente, 7).toString();
+
+    // Crear y reproducir el nuevo archivo de audio
+    FileInputStream fis = new FileInputStream(rutaCancion);
+    BufferedInputStream bis = new BufferedInputStream(fis);
+    player = new Player(bis);
+
+    // Cambiar la selección en la tabla a la siguiente canción
+    TablaMyV.setRowSelectionInterval(filaSiguiente, filaSiguiente);
+
+    // Reproducir la canción en un nuevo hilo para evitar que la interfaz se congele
+    new Thread(() -> {
+        try {
+            player.play();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al reproducir la canción: " + e.getMessage());
+        }
+    }).start();
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(this, "Error al reproducir la siguiente canción: " + e.getMessage());
+}
+    }//GEN-LAST:event_BotonSigMusicActionPerformed
     
     
    private void buscarArchivoMP3(File directorio, DefaultTableModel modeloTabla) {
@@ -396,6 +463,7 @@ private String formatDuracion(int duracionSegundos) {
     int segundos = duracionSegundos % 60;
     return String.format("%d:%02d", minutos, segundos); // Formato "mm:ss"
 }
+
 
 
     /**

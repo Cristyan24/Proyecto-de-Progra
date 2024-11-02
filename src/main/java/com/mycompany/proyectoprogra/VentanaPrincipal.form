@@ -396,6 +396,9 @@
                   <Image iconType="3" name="/fondos/siguiente.png"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotonSigMusicActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="MostrarImagen">
               <Properties>
