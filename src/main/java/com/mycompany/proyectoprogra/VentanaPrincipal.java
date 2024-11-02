@@ -13,6 +13,12 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+//Para reproducir musica
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
+import javax.swing.JTable;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -21,7 +27,7 @@ import org.jaudiotagger.tag.Tag;
 public class VentanaPrincipal extends javax.swing.JFrame {
     
     public String RutaAcceso;
-    //private Player reproductorActual;
+    private Player player;
     //private EmbeddedMediaPlayerComponent mediaPlayerComponent;
     
     public VentanaPrincipal() {
@@ -65,6 +71,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonSigMusic = new javax.swing.JButton();
         MostrarImagen = new javax.swing.JButton();
         VerVideo = new javax.swing.JButton();
+        BotonPausa = new javax.swing.JButton();
         Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -174,6 +181,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotReproducirMusic.setBackground(new java.awt.Color(0, 0, 0));
         BotReproducirMusic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/Reproducir.png"))); // NOI18N
+        BotReproducirMusic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotReproducirMusicActionPerformed(evt);
+            }
+        });
 
         BotonSigMusic.setBackground(new java.awt.Color(0, 0, 0));
         BotonSigMusic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/siguiente.png"))); // NOI18N
@@ -183,6 +195,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         VerVideo.setBackground(new java.awt.Color(0, 0, 0));
         VerVideo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/VerVideo.png"))); // NOI18N
+
+        BotonPausa.setBackground(new java.awt.Color(0, 0, 0));
+        BotonPausa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/Pausa.png"))); // NOI18N
+        BotonPausa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonPausaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -196,20 +216,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(BotonSigMusic)
                 .addGap(18, 18, 18)
+                .addComponent(BotonPausa)
+                .addGap(18, 18, 18)
                 .addComponent(VerVideo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(MostrarImagen)
-                .addContainerGap(543, Short.MAX_VALUE))
+                .addContainerGap(487, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BotonAtrasMusic)
-                    .addComponent(BotReproducirMusic)
-                    .addComponent(BotonSigMusic)
-                    .addComponent(VerVideo)
-                    .addComponent(MostrarImagen, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(BotonPausa)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(BotonAtrasMusic)
+                        .addComponent(BotReproducirMusic)
+                        .addComponent(BotonSigMusic)
+                        .addComponent(VerVideo, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(MostrarImagen, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addGap(0, 11, Short.MAX_VALUE))
         );
 
@@ -271,6 +295,39 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         
         buscarArchivoMP3(new File(RutaAcceso), modeloTabla);
     }//GEN-LAST:event_BotonMusicActionPerformed
+
+    private void BotReproducirMusicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotReproducirMusicActionPerformed
+        int filaSeleccionada = TablaMyV.getSelectedRow();
+    if (filaSeleccionada != -1) {
+        String rutaCancion = (String) TablaMyV.getValueAt(filaSeleccionada, 7); // Asume que la columna 7 tiene la ruta
+
+        // Detener cualquier reproducción anterior
+        if (player != null) {
+            player.close();
+        }
+
+        try {
+            FileInputStream fis = new FileInputStream(rutaCancion);
+            player = new Player(fis);
+            new Thread(() -> {
+                try {
+                    player.play();
+                } catch (JavaLayerException e) {
+                    System.out.println("Error al reproducir la canción: " + e.getMessage());
+                }
+            }).start();
+
+        } catch (FileNotFoundException | JavaLayerException e) {
+            System.out.println("Error al cargar la canción: " + e.getMessage());
+        }
+    } else {
+        System.out.println("No se ha seleccionado ninguna canción.");
+    }
+    }//GEN-LAST:event_BotReproducirMusicActionPerformed
+
+    private void BotonPausaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonPausaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonPausaActionPerformed
     
     
    private void buscarArchivoMP3(File directorio, DefaultTableModel modeloTabla) {
@@ -382,6 +439,7 @@ private String formatDuracion(int duracionSegundos) {
     private javax.swing.JButton BotonAtrasMusic;
     private javax.swing.JButton BotonImagen;
     private javax.swing.JButton BotonMusic;
+    private javax.swing.JButton BotonPausa;
     private javax.swing.JButton BotonSigMusic;
     private javax.swing.JButton BotonVideo;
     private javax.swing.JLabel Fondo;
