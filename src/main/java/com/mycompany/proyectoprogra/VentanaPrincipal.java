@@ -1,12 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package com.mycompany.proyectoprogra;
 
 import java.awt.Image;
+import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -14,30 +14,21 @@ import javax.swing.JFileChooser;
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
     private Carpeta carpetaSeleccionada;
+    public String RutaAcceso;
+    //private Player reproductorActual;
+    //private EmbeddedMediaPlayerComponent mediaPlayerComponent;
     
-    
-    public class Carpeta {
-    private String ruta;
-
-    // Constructor que recibe la ruta de la carpeta seleccionada
-    public Carpeta(String ruta) {
-        this.ruta = ruta;
-    }
-
-    // Método para obtener la ruta de la carpeta
-    public String getRuta() {
-        return ruta;
-    }
-}
-    
-    //Constructor
     public VentanaPrincipal() {
         initComponents();
         
+        TextoRuta.setEditable(false);
         VerVideo.setVisible(false);
         MostrarImagen.setVisible(false);
         
     }
+    /*public class Player getReproductorActual(){
+        return reproductorActual;
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,11 +45,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonVideo = new javax.swing.JButton();
         BotonImagen = new javax.swing.JButton();
         AbrirCarpeta = new javax.swing.JButton();
+        PesoLabel = new javax.swing.JLabel();
+        RutaLabel = new javax.swing.JLabel();
+        PesoCarpeta = new javax.swing.JTextField();
         TextoRuta = new javax.swing.JTextField();
         list1 = new java.awt.List();
         PanelTablas = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TablaMusic = new javax.swing.JTable();
+        TablaMyV = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         BotonAtrasMusic = new javax.swing.JButton();
         BotReproducirMusic = new javax.swing.JButton();
@@ -66,7 +60,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         MostrarImagen = new javax.swing.JButton();
         VerVideo = new javax.swing.JButton();
         Fondo = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,6 +73,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonMusic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BotonMusic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/musica2.png"))); // NOI18N
         BotonMusic.setText("Musica");
+        BotonMusic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonMusicActionPerformed(evt);
+            }
+        });
         jPanel1.add(BotonMusic, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 160, 70));
 
         BotonVideo.setBackground(new java.awt.Color(0, 0, 0));
@@ -105,12 +103,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         jPanel1.add(AbrirCarpeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 80));
-        jPanel1.add(TextoRuta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 440, 30));
+
+        PesoLabel.setBackground(new java.awt.Color(255, 255, 255));
+        PesoLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        PesoLabel.setForeground(new java.awt.Color(255, 255, 255));
+        PesoLabel.setText("Peso de la carpeta:");
+        jPanel1.add(PesoLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 160, 40));
+
+        RutaLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        RutaLabel.setForeground(new java.awt.Color(255, 255, 255));
+        RutaLabel.setText("Ruta Seleccionada:");
+        jPanel1.add(RutaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
+        jPanel1.add(PesoCarpeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, 150, 30));
+        jPanel1.add(TextoRuta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 260, 30));
         jPanel1.add(list1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 160, 210));
 
         PanelTablas.setBackground(new java.awt.Color(51, 51, 51));
 
-        TablaMusic.setModel(new javax.swing.table.DefaultTableModel(
+        TablaMyV.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -129,7 +139,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(TablaMusic);
+        jScrollPane1.setViewportView(TablaMyV);
 
         javax.swing.GroupLayout PanelTablasLayout = new javax.swing.GroupLayout(PanelTablas);
         PanelTablas.setLayout(PanelTablasLayout);
@@ -201,9 +211,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/spiderman.jpg"))); // NOI18N
         jPanel1.add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1360, 690));
 
-        jTextField1.setText("jTextField1");
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 140, -1, -1));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,23 +225,41 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    
     private void AbrirCarpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirCarpetaActionPerformed
-        JFileChooser folderChooser = new JFileChooser();
-        folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Solo seleccionar directorios
+        JFileChooser carpetaSelec = new JFileChooser();
+        carpetaSelec.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Solo seleccionar directorios
         
         // Mostrar el diálogo de selección de carpeta
-        int result = folderChooser.showOpenDialog(null);
+        int result = carpetaSelec.showOpenDialog(null);
         
         // Si el usuario selecciona una carpeta
         if (result == JFileChooser.APPROVE_OPTION) {
-            String rutaSeleccionada = folderChooser.getSelectedFile().getAbsolutePath();
+            File rutaSeleccionada = carpetaSelec.getSelectedFile();
+            
+            RutaAcceso = rutaSeleccionada.getAbsolutePath();
             
             // Mostrar la ruta seleccionada en el JTextField
-            TextoRuta.setText(rutaSeleccionada); 
-            
-             carpetaSeleccionada = new Carpeta(rutaSeleccionada);
+            TextoRuta.setText(RutaAcceso);       
         }
+        else {
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado una carpeta");
+        }
+        
     }//GEN-LAST:event_AbrirCarpetaActionPerformed
+
+    private void BotonMusicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonMusicActionPerformed
+        
+        if(RutaAcceso == null || RutaAcceso.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Selecciona una carpeta antes de dar clic en Musica");
+            return;
+        }
+        
+        DefaultTableModel modeloTabla = (DefaultTableModel) TablaMyV.getModel();
+        modeloTabla.setRowCount(0);
+    }//GEN-LAST:event_BotonMusicActionPerformed
 
     /**
      * @param args the command line arguments
@@ -282,14 +307,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel Fondo;
     private javax.swing.JButton MostrarImagen;
     private javax.swing.JPanel PanelTablas;
-    private javax.swing.JTable TablaMusic;
+    private javax.swing.JTextField PesoCarpeta;
+    private javax.swing.JLabel PesoLabel;
+    private javax.swing.JLabel RutaLabel;
+    private javax.swing.JTable TablaMyV;
     private javax.swing.JTextField TextoRuta;
     private javax.swing.JLabel Titulo1;
     private javax.swing.JButton VerVideo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private java.awt.List list1;
     // End of variables declaration//GEN-END:variables
 }
