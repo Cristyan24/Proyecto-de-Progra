@@ -7,13 +7,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+//import javax.swing.text.html.HTML.Tag;
+//Para el modelo de tabla
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
 
 /**
  *
  * @author user
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
-    private Carpeta carpetaSeleccionada;
+    
     public String RutaAcceso;
     //private Player reproductorActual;
     //private EmbeddedMediaPlayerComponent mediaPlayerComponent;
@@ -120,6 +126,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         PanelTablas.setBackground(new java.awt.Color(51, 51, 51));
 
+        TablaMyV.setBackground(new java.awt.Color(204, 204, 204));
         TablaMyV.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
@@ -255,11 +262,84 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         if(RutaAcceso == null || RutaAcceso.isEmpty()){
             JOptionPane.showMessageDialog(this, "Selecciona una carpeta antes de dar clic en Musica");
             return;
+        }else{
+            JOptionPane.showMessageDialog(this, "Ha seleccionado la Carpeta Musica");
         }
         
         DefaultTableModel modeloTabla = (DefaultTableModel) TablaMyV.getModel();
         modeloTabla.setRowCount(0);
+        
+        buscarArchivoMP3(new File(RutaAcceso), modeloTabla);
     }//GEN-LAST:event_BotonMusicActionPerformed
+    
+    
+   private void buscarArchivoMP3(File directorio, DefaultTableModel modeloTabla) {
+            
+    // Verificar si el directorio existe y es un directorio
+    if (directorio != null && directorio.isDirectory()) {
+        // Obtener todos los archivos en el directorio
+        File[] archivos = directorio.listFiles();
+        if (archivos != null) {
+            for (File archivo : archivos) {
+                // Si es un directorio, llamar a la función recursivamente
+                if (archivo.isDirectory()) {
+                    buscarArchivoMP3(archivo, modeloTabla); // Llamada recursiva para buscar en subdirectorios
+                } else if (archivo.isFile() && archivo.getName().toLowerCase().endsWith(".mp3")) {
+                    String nombre = archivo.getName();
+                    String extension = ".mp3";
+                    String artista = "Desconocido";
+                    String album = "Desconocido";
+                    String genero = "Desconocido";
+                    String duracion = "Desconocido";
+                    String anio = "Desconocido";
+                    String ruta = archivo.getAbsolutePath();
+                    double tamano = archivo.length() / (1024.0 * 1024.0); // Tamaño en MB
+
+                    try {
+                        // Leer el archivo de audio
+                        AudioFile audio = AudioFileIO.read(archivo);
+                        Tag tag = audio.getTag();
+
+                        // Extraer información del tag si está disponible
+                        if (tag != null) {
+                            artista = tag.getFirst(FieldKey.ARTIST); 
+                            album = tag.getFirst(FieldKey.ALBUM); 
+                            genero = tag.getFirst(FieldKey.GENRE); 
+                            int duracionSegundos = audio.getAudioHeader().getTrackLength(); // Duración en segundos
+                            duracion = formatDuracion(duracionSegundos); // Convertir a formato "mm:ss"
+                            anio = tag.getFirst(FieldKey.YEAR); 
+                        }
+                    } catch (Exception e) {
+                        // Manejo de excepciones si hay problemas con el archivo
+                        System.out.println("Error al leer el archivo: " + archivo.getName());
+                    }
+
+                    // Agregar los datos al modelo de tabla
+                    modeloTabla.addRow(new Object[]{
+                        nombre,
+                        extension,
+                        artista != null ? artista : "Desconocido",
+                        album != null ? album : "Desconocido",
+                        genero != null ? genero : "Desconocido",
+                        duracion != null ? duracion : "Desconocido",
+                        anio != null ? anio : "Desconocido",
+                        ruta,
+                        String.format("%.2f MB", tamano) 
+                    });
+                }
+            }
+        }
+    } else {
+        System.out.println("El directorio no es válido o no existe.");
+    }
+}
+
+private String formatDuracion(int duracionSegundos) {
+    int minutos = duracionSegundos / 60;
+    int segundos = duracionSegundos % 60;
+    return String.format("%d:%02d", minutos, segundos); // Formato "mm:ss"
+}
+
 
     /**
      * @param args the command line arguments
