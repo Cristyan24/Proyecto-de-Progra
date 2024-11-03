@@ -8,15 +8,24 @@ package com.mycompany.proyectoprogra;
  *
  * @author user
  */
+
+import javax.swing.JPanel;
+import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
+import javafx.application.Platform;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+
+
 public class Videos extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Videos
-     */
+           private EmbeddedMediaPlayerComponent mediaPlayerComponent;
+           private VentanaPrincipal VentanaPrincipal;
+
     public Videos() {
         initComponents();
+        
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,6 +52,11 @@ public class Videos extends javax.swing.JFrame {
         );
 
         RegresarForm.setText("Regresar");
+        RegresarForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegresarFormActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,6 +83,21 @@ public class Videos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    
+        
+    public void reproducir(String rutaVideo){
+        mediaPlayerComponent.mediaPlayer().media().start(rutaVideo);
+        
+    }
+    private void RegresarFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegresarFormActionPerformed
+        VentanaPrincipal nuevo = new VentanaPrincipal();
+        
+        nuevo.setVisible(true); 
+
+    // Cerrar la ventana actual (Videos)
+    this.dispose(); 
+    }//GEN-LAST:event_RegresarFormActionPerformed
 
     /**
      * @param args the command line arguments
@@ -100,7 +129,7 @@ public class Videos extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Videos().setVisible(true);
+                new Videos().setVisible(true); // Proporcionar valores de prueba
             }
         });
     }
@@ -109,4 +138,5 @@ public class Videos extends javax.swing.JFrame {
     private javax.swing.JButton RegresarForm;
     private javax.swing.JPanel VerVideoJava;
     // End of variables declaration//GEN-END:variables
+
 }

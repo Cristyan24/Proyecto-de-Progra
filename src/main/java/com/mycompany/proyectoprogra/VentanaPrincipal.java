@@ -2,6 +2,7 @@
 package com.mycompany.proyectoprogra;
 
 import java.awt.Image;
+import java.awt.event.MouseEvent;
 import java.io.BufferedInputStream;
 import java.io.File;
 import javax.swing.ImageIcon;
@@ -19,6 +20,12 @@ import javazoom.jl.player.Player;
 import javax.swing.JTable;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+//Ver videos
+import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
+import javafx.application.Platform;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 
 /**
  *
@@ -30,7 +37,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private Player player;
     private boolean enPausa = false;
     private int pausaFrame = 0;
-    //private EmbeddedMediaPlayerComponent mediaPlayerComponent;
+    private EmbeddedMediaPlayerComponent mediaPlayerComponent;
     
     public VentanaPrincipal() {
         initComponents();
@@ -100,6 +107,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonVideo.setForeground(new java.awt.Color(255, 255, 255));
         BotonVideo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/videos.png"))); // NOI18N
         BotonVideo.setText("Videos");
+        BotonVideo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonVideoActionPerformed(evt);
+            }
+        });
         jPanel1.add(BotonVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 160, -1));
 
         BotonImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/ImagenIncono.png"))); // NOI18N
@@ -180,6 +192,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotonAtrasMusic.setBackground(new java.awt.Color(0, 0, 0));
         BotonAtrasMusic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/atras.png"))); // NOI18N
+        BotonAtrasMusic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonAtrasMusicActionPerformed(evt);
+            }
+        });
 
         BotReproducirMusic.setBackground(new java.awt.Color(0, 0, 0));
         BotReproducirMusic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/Reproducir.png"))); // NOI18N
@@ -202,6 +219,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         VerVideo.setBackground(new java.awt.Color(0, 0, 0));
         VerVideo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/VerVideo.png"))); // NOI18N
+        VerVideo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerVideoActionPerformed(evt);
+            }
+        });
 
         BotonPausa.setBackground(new java.awt.Color(0, 0, 0));
         BotonPausa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/Pausa.png"))); // NOI18N
@@ -286,6 +308,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado una carpeta");
         }
         
+        
     }//GEN-LAST:event_AbrirCarpetaActionPerformed
 
     private void BotonMusicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonMusicActionPerformed
@@ -320,7 +343,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 try {
                     player.play();
                 } catch (JavaLayerException e) {
-                    System.out.println("Error al reproducir la canción: " + e.getMessage());
+                    //System.out.println("Error al reproducir la canción: " + e.getMessage());
                 }
             }).start();
 
@@ -395,6 +418,88 @@ try {
     JOptionPane.showMessageDialog(this, "Error al reproducir la siguiente canción: " + e.getMessage());
 }
     }//GEN-LAST:event_BotonSigMusicActionPerformed
+
+    private void BotonAtrasMusicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonAtrasMusicActionPerformed
+        int filaActual = TablaMyV.getSelectedRow();
+    if (filaActual == -1) {
+        JOptionPane.showMessageDialog(this, "Por favor selecciona una canción.");
+        return;
+    }
+
+    // Obtener la fila anterior
+    int filaAnterior = filaActual - 1;
+    if (filaAnterior < 0) {
+        JOptionPane.showMessageDialog(this, "No hay más canciones en la lista.");
+        return;
+    }
+
+    try {
+        // Cerrar el reproductor actual antes de reproducir la canción anterior
+        if (player != null) {
+            player.close();
+        }
+        
+        // Obtener la ruta del archivo de la canción anterior
+        String rutaCancion = (String) TablaMyV.getValueAt(filaAnterior, 7);
+
+        // Crear y reproducir el nuevo archivo de audio
+        FileInputStream fis = new FileInputStream(rutaCancion);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        player = new Player(bis);
+
+        // Cambiar la selección en la tabla a la canción anterior
+        TablaMyV.setRowSelectionInterval(filaAnterior, filaAnterior);
+
+        // Reproducir la canción en un nuevo hilo para evitar que la interfaz se congele
+        new Thread(() -> {
+            try {
+                player.play();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error al reproducir la canción: " + e.getMessage());
+            }
+        }).start();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al reproducir la canción anterior: " + e.getMessage());
+    }
+    }//GEN-LAST:event_BotonAtrasMusicActionPerformed
+
+    private void BotonVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVideoActionPerformed
+        VerVideo.setVisible(true);
+        BotonAtrasMusic.setVisible(false);
+        BotReproducirMusic.setVisible(false);
+        BotonSigMusic.setVisible(false);
+        BotonPausa.setVisible(false);
+        if(RutaAcceso == null || RutaAcceso.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Selecciona una carpeta antes de dar clic en Videos");
+            return;
+        }else{
+            JOptionPane.showMessageDialog(this, "Ha seleccionado la Carpeta Videos");
+        }
+        
+        DefaultTableModel modeloTabla = (DefaultTableModel) TablaMyV.getModel();
+        modeloTabla.setRowCount(0);
+        
+        buscarArchivoMP4(new File(RutaAcceso), modeloTabla);
+    }//GEN-LAST:event_BotonVideoActionPerformed
+
+    private void VerVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerVideoActionPerformed
+          int filaSeleccionada = TablaMyV.getSelectedRow(); // Suponiendo que tienes una tabla para videos
+          
+    if (filaSeleccionada != -1) {
+        String rutaVideo = (String) TablaMyV.getValueAt(filaSeleccionada, 7);
+        
+        // Crear una nueva instancia del formulario de videos y pasar la ruta del video
+        Videos videoForm = new Videos(); // Pasar ruta y referencia a la ventana principal
+        //videoForm.reproducir(rutaVideo);
+        videoForm.setVisible(true); // Mostrar el formulario de video
+        
+        this.setVisible(false); // Ocultar el formulario principal
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor selecciona un video.");
+    }
+        
+    }//GEN-LAST:event_VerVideoActionPerformed
     
     
    private void buscarArchivoMP3(File directorio, DefaultTableModel modeloTabla) {
@@ -408,9 +513,72 @@ try {
                 // Si es un directorio, llamar a la función recursivamente
                 if (archivo.isDirectory()) {
                     buscarArchivoMP3(archivo, modeloTabla); // Llamada recursiva para buscar en subdirectorios
-                } else if (archivo.isFile() && archivo.getName().toLowerCase().endsWith(".mp3")) {
+                } else if (archivo.isFile() && archivo.getName().toLowerCase().endsWith(".mp3")
+                ||  archivo.getName().toLowerCase().endsWith(".wma")) {
                     String nombre = archivo.getName();
-                    String extension = ".mp3";
+                    String extension = archivo.getName().substring(archivo.getName().lastIndexOf('.')).toLowerCase(); // Obtiene la extensión real
+                    String artista = "Desconocido";
+                    String album = "Desconocido";
+                    String genero = "Desconocido";
+                    String duracion = "Desconocido";
+                    String anio = "Desconocido";
+                    String ruta = archivo.getAbsolutePath();
+                    double tamano = archivo.length() / (1024.0 * 1024.0); // Tamaño en MB
+
+                    try {
+                        // Leer el archivo de audio
+                        AudioFile audio = AudioFileIO.read(archivo);
+                        Tag tag = audio.getTag();
+
+                        // Extraer información del tag si está disponible
+                        if (tag != null) {
+                            artista = tag.getFirst(FieldKey.ARTIST); 
+                            album = tag.getFirst(FieldKey.ALBUM); 
+                            genero = tag.getFirst(FieldKey.GENRE); 
+                            int duracionSegundos = audio.getAudioHeader().getTrackLength(); // Duración en segundos
+                            duracion = formatDuracion(duracionSegundos); // Convertir a formato "mm:ss"
+                            anio = tag.getFirst(FieldKey.YEAR); 
+                        }
+                    } catch (Exception e) {
+                        // Manejo de excepciones si hay problemas con el archivo
+                        System.out.println("Error al leer el archivo: " + archivo.getName());
+                    }
+
+                    // Agregar los datos al modelo de tabla
+                    modeloTabla.addRow(new Object[]{
+                        nombre,
+                        extension,
+                        artista != null ? artista : "Desconocido",
+                        album != null ? album : "Desconocido",
+                        genero != null ? genero : "Desconocido",
+                        duracion != null ? duracion : "Desconocido",
+                        anio != null ? anio : "Desconocido",
+                        ruta,
+                        String.format("%.2f MB", tamano) 
+                    });
+                }
+            }
+        }
+    } else {
+        System.out.println("El directorio no es válido o no existe.");
+    }
+}
+   
+   private void buscarArchivoMP4(File directorio, DefaultTableModel modeloTabla) {
+            
+    // Verificar si el directorio existe y es un directorio
+    if (directorio != null && directorio.isDirectory()) {
+        // Obtener todos los archivos en el directorio
+        File[] archivos = directorio.listFiles();
+        if (archivos != null) {
+            for (File archivo : archivos) {
+                // Si es un directorio, llamar a la función recursivamente
+                if (archivo.isDirectory()) {
+                    buscarArchivoMP4(archivo, modeloTabla); // Llamada recursiva para buscar en subdirectorios
+                } else if (archivo.isFile() && archivo.getName().toLowerCase().endsWith(".mp4")
+                        || archivo.getName().toLowerCase().endsWith(".mkv")) {
+                    String nombre = archivo.getName();
+                    String extension = archivo.getName().substring(archivo.getName().lastIndexOf('.')).toLowerCase(); // Obtiene la extensión real
                     String artista = "Desconocido";
                     String album = "Desconocido";
                     String genero = "Desconocido";

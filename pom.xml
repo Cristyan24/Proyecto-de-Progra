@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
     
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>22</maven.compiler.source>
         <maven.compiler.target>22</maven.compiler.target>
         <exec.mainClass>com.mycompany.proyectoprogra.ProyectoProgra</exec.mainClass>
@@ -25,6 +25,23 @@
                 </includes>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.mycompany.proyectoprogra.ProyectoProgra</mainClass> <!-- Cambia esto a tu clase principal -->
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
     
     <dependencies>
@@ -33,6 +50,13 @@
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE210</version>
         </dependency>
+        <dependency>
+            <groupId>uk.co.caprica</groupId>
+            <artifactId>vlcj</artifactId>
+            <version>5.0.0-M1</version>
+            <type>jar</type>
+        </dependency>
+
         <dependency>
             <groupId>org.jaudiotagger</groupId>
             <artifactId>jaudiotagger</artifactId>
@@ -45,8 +69,34 @@
             <version>1.0.1.4</version>
             <type>jar</type>
         </dependency>
-    </dependencies>
 
+        <!-- Dependencias de JavaFX -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>19.0.2</version> <!-- Asegúrate de usar la versión más reciente -->
+        </dependency>
+        
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>19.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>24-ea+5</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>19.0.2</version>
+        </dependency>
+    </dependencies>
+    
     <repositories>
         <repository>
             <id>central</id>

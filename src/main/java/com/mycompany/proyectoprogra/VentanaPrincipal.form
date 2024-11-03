@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -90,6 +90,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Videos"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotonVideoActionPerformed"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="200" y="180" width="160" height="-1"/>
@@ -373,6 +376,9 @@
                   <Image iconType="3" name="/fondos/atras.png"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotonAtrasMusicActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="BotReproducirMusic">
               <Properties>
@@ -419,6 +425,9 @@
                   <Image iconType="3" name="/fondos/VerVideo.png"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="VerVideoActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="BotonPausa">
               <Properties>
