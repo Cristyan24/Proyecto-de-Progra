@@ -37,14 +37,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private Player player;
     private boolean enPausa = false;
     private int pausaFrame = 0;
-    private EmbeddedMediaPlayerComponent mediaPlayerComponent;
+    
     
     public VentanaPrincipal() {
         initComponents();
         
         TextoRuta.setEditable(false);
         VerVideo.setVisible(false);
-        MostrarImagen.setVisible(false);
+        BotonAtrasMusic.setVisible(false);
+        BotonPausa.setVisible(false);
+        BotonSigMusic.setVisible(false);
+        BotReproducirMusic.setVisible(false);
+      
         
     }
     /*public class Player getReproductorActual(){
@@ -78,7 +82,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonAtrasMusic = new javax.swing.JButton();
         BotReproducirMusic = new javax.swing.JButton();
         BotonSigMusic = new javax.swing.JButton();
-        MostrarImagen = new javax.swing.JButton();
         VerVideo = new javax.swing.JButton();
         BotonPausa = new javax.swing.JButton();
         Fondo = new javax.swing.JLabel();
@@ -116,6 +119,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotonImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/ImagenIncono.png"))); // NOI18N
         BotonImagen.setText("Imágenes");
+        BotonImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonImagenActionPerformed(evt);
+            }
+        });
         jPanel1.add(BotonImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 160, 70));
 
         AbrirCarpeta.setBackground(new java.awt.Color(9, 3, 3));
@@ -214,9 +222,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        MostrarImagen.setBackground(new java.awt.Color(0, 0, 0));
-        MostrarImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/IconImage.png"))); // NOI18N
-
         VerVideo.setBackground(new java.awt.Color(0, 0, 0));
         VerVideo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fondos/VerVideo.png"))); // NOI18N
         VerVideo.addActionListener(new java.awt.event.ActionListener() {
@@ -248,9 +253,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(BotonPausa)
                 .addGap(18, 18, 18)
                 .addComponent(VerVideo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(MostrarImagen)
-                .addContainerGap(487, Short.MAX_VALUE))
+                .addContainerGap(535, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,8 +264,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addComponent(BotonAtrasMusic)
                         .addComponent(BotReproducirMusic)
                         .addComponent(BotonSigMusic)
-                        .addComponent(VerVideo, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(MostrarImagen, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addComponent(VerVideo, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addGap(0, 11, Short.MAX_VALUE))
         );
 
@@ -313,6 +315,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void BotonMusicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonMusicActionPerformed
         
+        BotonAtrasMusic.setVisible(true);
+        BotonPausa.setVisible(true);
+        BotonSigMusic.setVisible(true);
+        BotReproducirMusic.setVisible(true);
+        VerVideo.setVisible(false);
         if(RutaAcceso == null || RutaAcceso.isEmpty()){
             JOptionPane.showMessageDialog(this, "Selecciona una carpeta antes de dar clic en Musica");
             return;
@@ -500,6 +507,11 @@ try {
     }
         
     }//GEN-LAST:event_VerVideoActionPerformed
+
+    private void BotonImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonImagenActionPerformed
+        Imagenes nuevo = new Imagenes();
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_BotonImagenActionPerformed
     
     
    private void buscarArchivoMP3(File directorio, DefaultTableModel modeloTabla) {
@@ -679,7 +691,6 @@ private String formatDuracion(int duracionSegundos) {
     private javax.swing.JButton BotonSigMusic;
     private javax.swing.JButton BotonVideo;
     private javax.swing.JLabel Fondo;
-    private javax.swing.JButton MostrarImagen;
     private javax.swing.JPanel PanelTablas;
     private javax.swing.JTextField PesoCarpeta;
     private javax.swing.JLabel PesoLabel;
