@@ -49,7 +49,7 @@ public class Imagenes extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Fondos.setBackground(new java.awt.Color(204, 204, 204));
+        Fondos.setBackground(new java.awt.Color(153, 153, 153));
 
         AbrirCarpeta.setBackground(new java.awt.Color(9, 3, 3));
         AbrirCarpeta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
